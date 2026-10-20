@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:GaleriaMultimedia.ViewModels"
+             xmlns:models="clr-namespace:GaleriaMultimedia.Models"
+             x:Class="GaleriaMultimedia.Views.GaleriaPage"
+             x:DataType="vm:GaleriaViewModel"
+             Title="Galería"
+             BackgroundColor="{StaticResource Fondo}"
+             Shell.NavBarIsVisible="False">
+
+	<Grid RowDefinitions="Auto,Auto,Auto,*" Padding="20,16,20,0">
+
+		<!-- Encabezado -->
+		<VerticalStackLayout Grid.Row="0" Spacing="2" Margin="0,8,0,16">
+			<Label Text="MAPACHERIA" FontSize="13" CharacterSpacing="1"
+			       TextColor="{StaticResource TextoSuave}" />
+			<Label Text="Galería" FontSize="34" FontAttributes="Bold"
+			       TextColor="{StaticResource Tinta}" />
+		</VerticalStackLayout>
+
+		<!-- Búsqueda por título -->
+		<Border Grid.Row="1" BackgroundColor="White" Stroke="{StaticResource Borde}"
+		        StrokeThickness="1.5" StrokeShape="RoundRectangle 14" Padding="4,0">
+			<SearchBar Placeholder="Buscar por título"
+			           Text="{Binding TextoBusqueda}"
+			           BackgroundColor="Transparent"
+			           TextColor="{StaticResource Tinta}"
+			           PlaceholderColor="{StaticResource TextoSuave}" />
+		</Border>
+
+		<!-- Filtros por categoría -->
+		<CollectionView Grid.Row="2" Margin="0,14,0,0" HeightRequest="44"
+		                ItemsSource="{Binding Categorias}"
+		                SelectedItem="{Binding CategoriaSeleccionada}"
+		                SelectionMode="Single"
+		                ItemsLayout="HorizontalList">
+			<CollectionView.ItemTemplate>
+				<DataTemplate x:DataType="x:String">
+					<Border Margin="0,0,8,0" Padding="18,0" HeightRequest="40"
+					        BackgroundColor="White" Stroke="{StaticResource Borde}"
+					        StrokeThickness="1.5" StrokeShape="RoundRectangle 20">
+						<VisualStateManager.VisualStateGroups>
+							<VisualStateGroupList>
+								<VisualStateGroup x:Name="CommonStates">
+									<VisualState x:Name="Normal" />
+									<VisualState x:Name="Selected">
+										<VisualState.Setters>
+											<Setter Property="BackgroundColor" Value="{StaticResource Tinta}" />
+											<Setter Property="Stroke" Value="{StaticResource Tinta}" />
+											<Setter TargetName="etiqueta" Property="Label.TextColor" Value="White" />
+										</VisualState.Setters>
+									</VisualState>
+								</VisualStateGroup>
+							</VisualStateGroupList>
+						</VisualStateManager.VisualStateGroups>
+						<Label x:Name="etiqueta" Text="{Binding .}" FontSize="15"
+						       VerticalOptions="Center" TextColor="{StaticResource Tinta}" />
+					</Border>
+				</DataTemplate>
+			</CollectionView.ItemTemplate>
+		</CollectionView>
+
+		<!-- Galería en cuadrícula de 2 columnas -->
+		<CollectionView Grid.Row="3" Margin="0,16,0,0"
+		                ItemsSource="{Binding Fotos}"
+		                SelectionMode="None">
+			<CollectionView.ItemsLayout>
+				<GridItemsLayout Orientation="Vertical" Span="2"
+				                 HorizontalItemSpacing="12" VerticalItemSpacing="12" />
+			</CollectionView.ItemsLayout>
+
+			<CollectionView.EmptyView>
+				<VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center"
+				                     Spacing="8" Padding="0,60,0,0">
+					<Label Text="🖼" FontSize="48" HorizontalTextAlignment="Center" />
+					<Label Text="No hay fotos para mostrar" FontSize="18" FontAttributes="Bold"
+					       HorizontalTextAlignment="Center" TextColor="{StaticResource Tinta}" />
+					<Label Text="Toca el botón + para agregar tu primera foto."
+					       HorizontalTextAlignment="Center" TextColor="{StaticResource TextoSuave}" />
+				</VerticalStackLayout>
+			</CollectionView.EmptyView>
+
+			<CollectionView.Footer>
+				<BoxView HeightRequest="90" Color="Transparent" />
+			</CollectionView.Footer>
+
+			<CollectionView.ItemTemplate>
+				<DataTemplate x:DataType="models:Foto">
+					<Border BackgroundColor="White" Stroke="Transparent" Padding="0"
+					        StrokeShape="RoundRectangle 20">
+						<Border.GestureRecognizers>
+							<TapGestureRecognizer
+								Command="{Binding Source={RelativeSource AncestorType={x:Type vm:GaleriaViewModel}}, Path=AbrirDetalleCommand}"
+								CommandParameter="{Binding .}" />
+						</Border.GestureRecognizers>
+						<Grid RowDefinitions="130,Auto">
+							<Image Source="{Binding Imagen}" Aspect="AspectFill"
+							       BackgroundColor="{StaticResource PlaceholderFoto}" />
+							<VerticalStackLayout Grid.Row="1" Padding="14,12,14,14" Spacing="2"
+							                     MinimumHeightRequest="84">
+								<Label Text="{Binding Titulo}" FontSize="16" FontAttributes="Bold"
+								       MaxLines="2" LineBreakMode="TailTruncation"
+								       TextColor="{StaticResource Tinta}" />
+								<Label Text="{Binding Subtitulo}" FontSize="13"
+								       TextColor="{StaticResource TextoSuave}" />
+							</VerticalStackLayout>
+						</Grid>
+					</Border>
+				</DataTemplate>
+			</CollectionView.ItemTemplate>
+		</CollectionView>
+
+		<!-- Botón flotante + -->
+		<Button Grid.Row="3" Text="+" FontSize="32" Padding="0,0,0,4"
+		        WidthRequest="64" HeightRequest="64" CornerRadius="32"
+		        HorizontalOptions="End" VerticalOptions="End" Margin="0,0,4,24"
+		        BackgroundColor="{StaticResource Acento}" TextColor="White"
+		        Command="{Binding NuevaFotoCommand}">
+			<Button.Shadow>
+				<Shadow Brush="{StaticResource Acento}" Opacity="0.4" Radius="16" Offset="0,6" />
+			</Button.Shadow>
+		</Button>
+	</Grid>
+</ContentPage>

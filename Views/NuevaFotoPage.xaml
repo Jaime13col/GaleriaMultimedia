@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:GaleriaMultimedia.ViewModels"
+             x:Class="GaleriaMultimedia.Views.NuevaFotoPage"
+             x:DataType="vm:NuevaFotoViewModel"
+             Title="Nueva foto"
+             BackgroundColor="{StaticResource Fondo}"
+             Shell.NavBarIsVisible="False">
+
+	<Grid RowDefinitions="Auto,*,Auto">
+
+		<!-- Encabezado -->
+		<Grid Grid.Row="0" ColumnDefinitions="Auto,*" Padding="12,16,20,8" ColumnSpacing="4">
+			<Button Text="‹" FontSize="34" Padding="0,0,0,4" WidthRequest="48" HeightRequest="48"
+			        BackgroundColor="Transparent" TextColor="{StaticResource Tinta}"
+			        Command="{Binding VolverCommand}" />
+			<Label Grid.Column="1" Text="{Binding TituloPagina}" FontSize="28" FontAttributes="Bold"
+			       VerticalOptions="Center" TextColor="{StaticResource Tinta}" />
+		</Grid>
+
+		<ScrollView Grid.Row="1">
+			<VerticalStackLayout Padding="20,8,20,20" Spacing="14">
+
+				<!-- Vista previa -->
+				<Border HeightRequest="220" BackgroundColor="{StaticResource PlaceholderFoto}"
+				        Stroke="#A8A398" StrokeThickness="2" StrokeDashArray="4,3"
+				        StrokeShape="RoundRectangle 22">
+					<Grid>
+						<Image Source="{Binding Vista}" Aspect="AspectFill" IsVisible="{Binding TieneImagen}" />
+						<VerticalStackLayout IsVisible="{Binding SinImagen}" VerticalOptions="Center" Spacing="10">
+							<Label Text="🖼" FontSize="40" HorizontalTextAlignment="Center" />
+							<Label Text="Vista previa de la imagen" HorizontalTextAlignment="Center"
+							       TextColor="{StaticResource TextoSuave}" />
+						</VerticalStackLayout>
+					</Grid>
+				</Border>
+
+				<!-- Cámara / Galería -->
+				<Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+					<Button Text="📷  Cámara" FontAttributes="Bold" HeightRequest="52" CornerRadius="14"
+					        BackgroundColor="{StaticResource Acento}" TextColor="White"
+					        Command="{Binding TomarFotoCommand}" />
+					<Button Grid.Column="1" Text="🖼  Galería" FontAttributes="Bold" HeightRequest="52" CornerRadius="14"
+					        BackgroundColor="White" TextColor="{StaticResource Acento}"
+					        BorderColor="{StaticResource Acento}" BorderWidth="1.5"
+					        Command="{Binding ElegirGaleriaCommand}" />
+				</Grid>
+
+				<!-- Título -->
+				<VerticalStackLayout Spacing="8">
+					<Label Text="Título" FontAttributes="Bold" TextColor="{StaticResource Tinta}" />
+					<Border BackgroundColor="White" Stroke="{StaticResource Borde}" StrokeThickness="1.5"
+					        StrokeShape="RoundRectangle 14" Padding="12,0">
+						<Entry Text="{Binding Titulo}" Placeholder="Ej: Atardecer en Monserrate"
+						       BackgroundColor="Transparent" HeightRequest="48"
+						       TextColor="{StaticResource Tinta}" PlaceholderColor="{StaticResource TextoSuave}" />
+					</Border>
+				</VerticalStackLayout>
+
+				<!-- Descripción -->
+				<VerticalStackLayout Spacing="8">
+					<Label Text="Descripción" FontAttributes="Bold" TextColor="{StaticResource Tinta}" />
+					<Border BackgroundColor="White" Stroke="{StaticResource Borde}" StrokeThickness="1.5"
+					        StrokeShape="RoundRectangle 14" Padding="12,4">
+						<Editor Text="{Binding Descripcion}" Placeholder="¿Qué muestra esta foto?"
+						        HeightRequest="110" BackgroundColor="Transparent"
+						        TextColor="{StaticResource Tinta}" PlaceholderColor="{StaticResource TextoSuave}" />
+					</Border>
+				</VerticalStackLayout>
+
+				<!-- Categoría -->
+				<VerticalStackLayout Spacing="8">
+					<Label Text="Categoría" FontAttributes="Bold" TextColor="{StaticResource Tinta}" />
+					<Border BackgroundColor="White" Stroke="{StaticResource Borde}" StrokeThickness="1.5"
+					        StrokeShape="RoundRectangle 14" Padding="12,0">
+						<Picker ItemsSource="{Binding Categorias}" SelectedItem="{Binding Categoria}"
+						        BackgroundColor="Transparent" HeightRequest="48"
+						        TextColor="{StaticResource Tinta}" />
+					</Border>
+				</VerticalStackLayout>
+			</VerticalStackLayout>
+		</ScrollView>
+
+		<!-- Guardar -->
+		<VerticalStackLayout Grid.Row="2" Spacing="0">
+			<BoxView HeightRequest="1" Color="{StaticResource Borde}" />
+			<Button Text="Guardar" FontAttributes="Bold" FontSize="17" HeightRequest="56" CornerRadius="28"
+			        Margin="20,14,20,20" BackgroundColor="{StaticResource Tinta}" TextColor="White"
+			        Command="{Binding GuardarCommand}" />
+		</VerticalStackLayout>
+	</Grid>
+</ContentPage>
